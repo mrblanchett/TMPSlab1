@@ -9,7 +9,7 @@ abstract class EffectMaker {
             const effect = this.SFX();
             console.log("CF: Effect created!", effect.addEffect());
         }
-        else console.log("CF: The client wanted no effects");
+        else console.log("CF: We were ready to work, but the client wanted no effects");
     }
 }
 
