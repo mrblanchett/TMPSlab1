@@ -1,3 +1,47 @@
+//factory: abstract class that gets extended
+//abstract factory: interface that gets implemented
+
+//factory
+abstract class EffectMaker {
+    public abstract SFX(): Effect;
+    public AddSFX(x: boolean): void {
+        if (x) {
+            const effect = this.SFX();
+            console.log("CF: Effect created!", effect.addEffect());
+        }
+        else console.log("CF: The client wanted no effects");
+    }
+}
+
+class GlitterMaker extends EffectMaker {
+    public SFX(): Effect {
+        return new Glitter();
+    }
+}
+
+class GlowMaker extends EffectMaker {
+    public SFX(): Effect {
+        return new Glow();
+    }
+}
+
+interface Effect {
+    addEffect(): string;
+}
+
+
+class Glitter implements Effect {
+    public addEffect(): string {
+        return 'Added glitter';
+    }
+}
+
+class Glow implements Effect {
+    public addEffect(): string {
+        return 'Added glow';
+    }
+}
+
 //abstract factory
 interface AbstractFactory {
     createTriangle(): Triangle;
@@ -81,18 +125,23 @@ class WhiteCircle implements Circle {
     }
 }
 
-function clientCodeA(factory: AbstractFactory) {
-    const productA = factory.createTriangle();
-    const productB = factory.createCircle();
+function client(af: AbstractFactory, cf: EffectMaker, sfx: boolean) {
+    const myTriangle = af.createTriangle();
+    const myCircle = af.createCircle();
+    
+    console.log(myTriangle.triangleFunction());
+    console.log(myCircle.circleFunction());
 
-    console.log(productA.triangleFunction());
-    console.log(productB.circleFunction());
-
-    //client's code can work with conctrete classes
-    console.log('Client: Testing client code with the first factory type...');
-    clientCodeA(RedFactory.getInstance());
-
-    console.log('Client: Testing the same client code with the second factory type...');
-    clientCodeA(WhiteFactory.getInstance());
-
+    cf.AddSFX(sfx);
 }
+
+console.log('Testing red factory with glitter');
+client(RedFactory.getInstance(), new GlitterMaker, true);
+console.log();
+
+console.log('Testing white factory with glow');
+client(WhiteFactory.getInstance(), new GlowMaker, true);
+console.log();
+
+console.log('Testing white factory with no effects');
+client(WhiteFactory.getInstance(), new GlowMaker, false);
