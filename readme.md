@@ -1,7 +1,7 @@
 # TMPS
 
 ## Lab №1
- - Abstract Factory, Factory and Singleton patterns are implemented in 'factory-singleton.ts'
+ - Abstract Factory, Factory and Singleton patterns are implemented in 'afactory-factory-singleton.ts'
  - Builder and Prototype patterns are implemented in 'builder-prototype.ts'
 
 ### **Abstract Factory Pattern**
@@ -12,10 +12,56 @@ interface AbstractFactory {
     createTriangle(): Triangle;
     createCircle(): Circle;
 }
+
+class RedFactory implements AbstractFactory {
+    private constructor() {};
+
+    public createTriangle(): Triangle {
+        return new RedTriangle();
+    }
+
+    public createCircle(): Circle {
+        return new RedCircle();
+    }
+
+    private static instance: RedFactory;
+
+    public static getInstance(): RedFactory {
+        if (!RedFactory.instance) {
+            RedFactory.instance = new RedFactory();
+        }
+        return RedFactory.instance;
+    }
+}
 ```
 
 ### Factory Pattern
 Factory Method is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
+
+```
+abstract class EffectMaker {
+    public abstract SFX(): Effect;
+    public AddSFX(x: boolean): void {
+        if (x) {
+            const effect = this.SFX();
+            console.log("CF: Effect created!", effect.addEffect());
+        }
+        else console.log("CF: We were ready to work, but the client wanted no effects");
+    }
+}
+
+class GlitterMaker extends EffectMaker {
+    public SFX(): Effect {
+        return new Glitter();
+    }
+}
+
+class GlowMaker extends EffectMaker {
+    public SFX(): Effect {
+        return new Glow();
+    }
+}
+```
 
 ### Singleton Pattern
 Singleton is a creational design pattern that lets you ensure that a class has only one instance, while providing a global access point to this instance.
